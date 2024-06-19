@@ -31,10 +31,8 @@ const Register = () => {
 	},[password, passwordFocus]);
 
 	useEffect(()=> {
-		setValidCfrmPassword(cfrmPasswordFocus? PWD_REGEX.test(password) && password === cfrmPassword: true);
+		setValidCfrmPassword(cfrmPasswordFocus? password === cfrmPassword: true);
 	},[cfrmPassword, cfrmPasswordFocus]);
-
-
 
 	return (
 		<div className='Register'>
