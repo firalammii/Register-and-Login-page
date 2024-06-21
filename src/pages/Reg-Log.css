@@ -1,0 +1,87 @@
+.Register,
+.Login {
+	/* border: 1px solid gray; */
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	/* display: grid; */
+	/* grid-template-rows: auto 40px auto; */
+}
+
+.title {
+	margin: 2em 0;
+
+	text-align: center;
+	vertical-align: center;
+}
+
+.form {
+	display: grid;
+	gap: 5px;
+}
+
+.input {
+	width: 100%;
+	font-size: 1.25rem;
+	letter-spacing: 2px;
+	padding: 10px 5px;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+	background-color: white;
+}
+
+.submit__btn {
+	background-color: rgb(108, 175, 241);
+	color: white;
+	margin-top: 1em;
+	cursor: pointer;
+}
+.submit__btn:hover {
+	background-color: rgb(62, 155, 249);
+	scale: 1.0125;
+}
+
+.back__btn {
+	background-color: rgb(139, 145, 152);
+	color: white;
+	cursor: pointer;
+}
+.back__btn:hover {
+	background-color: rgb(109, 117, 128);
+	scale: 1.0125;
+}
+
+.para__error {
+	margin: auto;
+	text-align: center;
+	font-size: 2rem;
+	font-size: 1.5rem;
+	font-weight: 900;
+	color: crimson;
+}
+
+.para__footer {
+	text-align: center;
+	margin-top: auto;
+}
+
+.para__footer>.link {
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+.err_border {
+	border: 2px solid crimson;
+}
+
+.err_msg {
+	color: crimson;
+	/* text-align: center; */
+	/* padding: 5px; */
+	/* margin-bottom: 10px; */
+}
+
+.offscreen {
+	z-index: -999;
+}

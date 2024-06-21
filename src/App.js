@@ -1,7 +1,7 @@
 import React from 'react'
-import Register from './pages/Register';
 import { BrowserRouter, Route, Routes,} from 'react-router-dom';
 import Login from './pages/Login';
+import Admin from './pages/Admin';
 const App = () => {
 	return (
 		<div className='App'>
@@ -9,7 +9,7 @@ const App = () => {
 			 <Routes>
 				<Route path='/'>
 					<Route index element={<Login />} />
-					<Route path='/register' element={<Register />} />
+					<Route path='/admin' element={<Admin />} />
 					<Route path='/login' element={<Login />} />
 				</Route>
 			 </Routes>

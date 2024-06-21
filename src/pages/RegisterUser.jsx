@@ -1,45 +1,76 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+
+import { usersUrl } from '../api/urls';
+import './Reg-Log.css';
 
 const NAME_REGEX = /^[a-z_&#@][a-z0-9]{3,20}/i;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-const Register = () => {
+const RegisterUser = ({backHandler}) => {
 	const usernameRef = useRef(null);
 	const pwdRef = useRef(null);
 	const cfrmPwdRef = useRef(null);
 	const btnRef = useRef(null);
+	const [errorMsg, setErrorMsg] = useState('');
 
 	const [username, setUsername] = useState('');
 	const [usernameFocus, setUsernameFocus] = useState(false);
-	const [validUsername, setValidUsername] = useState(false);
+	const [validUsername, setValidUsername] = useState(true);
 
 	const [password, setPassword] = useState('');
 	const [passwordFocus, setPasswordFocus] = useState(false);
-	const [validPassword, setValidPassword] = useState(false);
+	const [validPassword, setValidPassword] = useState(true);
 
 	const [cfrmPassword, setCfrmPassword] = useState('');
 	const [cfrmPasswordFocus, setCfrmPasswordFocus] = useState(false);
-	const [validCfrmPassword, setValidCfrmPassword] = useState(false);
+	const [validCfrmPassword, setValidCfrmPassword] = useState(true);
 
 	useEffect(()=> {
-		setValidUsername(usernameFocus? NAME_REGEX.test(username) : true);
+		usernameRef.current.focus();
+	},[]);
+
+	useEffect(()=> {
+		
 	},[username, usernameFocus]);
 
 	useEffect(()=> {
-		setValidPassword(passwordFocus ? PWD_REGEX.test(password) : true);
-	},[password, passwordFocus]);
+		setErrorMsg('');
+		if (username)
+			setValidUsername(NAME_REGEX.test(username));
+		if (password)
+			setValidPassword(PWD_REGEX.test(password));
+		if(cfrmPasswordFocus)
+			setValidCfrmPassword(password === cfrmPassword);
+	}, [username, usernameFocus, password, passwordFocus, cfrmPassword, cfrmPasswordFocus]);
 
-	useEffect(()=> {
-		setValidCfrmPassword(cfrmPasswordFocus? password === cfrmPassword: true);
-	},[cfrmPassword, cfrmPasswordFocus]);
+	const handleRegister = async(e)=> {
+		e.preventDefault();
+		const valid = NAME_REGEX.test(username) && PWD_REGEX.test(password);
+		if(!valid){
+			setErrorMsg("Username or Password is not Valid");
+			setValidCfrmPassword(false);
+			setValidPassword(false);
+			setValidUsername(false);
+			return;
+		}
+		try {
+			const {response} = await axios.post(usersUrl, {username, pwd: password});
+			console.log(response);
+			
+		} catch (error) {
+			const {response} = error;
+			setErrorMsg(`${response?.data || response?.statusText} to Complete` );
+		}
+	}
 
 	return (
 		<div className='Register'>
 			<h2 className='title'>Register Form</h2>
-			<form className='form'>
+			<form className='form' onSubmit={handleRegister}>
 				<input 
-					className={validUsername ? "input" : "input error"}
+					className={validUsername ? "input" : "input err_border"}
 				  type='text'
 					placeholder='Username'
 					value={username}
@@ -51,7 +82,7 @@ const Register = () => {
 					ref={usernameRef}
 				/>
 				<input 
-					className={validPassword ? "input" : "input error"}
+					className={validPassword ? "input" : "input err_border"}
 				  type='password'
 					placeholder='Create Password'
 					value={password}
@@ -63,7 +94,7 @@ const Register = () => {
 					ref={pwdRef}
 				/>
 				<input 
-					className={validCfrmPassword ? "input" : "input error"}
+					className={validCfrmPassword ? "input" : "input err_border"}
 				  type='password'
 					placeholder='Confirm Password'
 					value={cfrmPassword}
@@ -80,8 +111,14 @@ const Register = () => {
 					value="Register"
 					ref={btnRef}
 				/>
+				<input 
+					className='input back__btn'
+				  type='button'
+					value="Back"
+					onClick={backHandler}
+				/>
 			</form>
-			<p className='para__error'>Registration Error</p>
+			<p className='para__error'>{errorMsg}</p>
 			<p className='para__footer'>Already registered? 
 				<Link to="/login" className='link'>Login</Link>
 			</p>
@@ -89,4 +126,4 @@ const Register = () => {
 	)
 }
 
-export default Register
+export default RegisterUser
